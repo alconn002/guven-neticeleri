@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İmtahan Nəticələri - Güvən Nəşrləri</title>
-    <link rel="icon" type="image/svg+xml" href="https://guvennesrleri.az/favicon.ico">
     <style>
         * {
             box-sizing: border-box;
@@ -21,7 +20,6 @@
             position: relative;
             overflow-x: hidden;
         }
-        /* Background geometric lines pattern matching original */
         body::before {
             content: "";
             position: absolute;
@@ -175,4 +173,357 @@
             display: none;
         }
 
-        /* Results Screen
+        .results-container {
+            display: none;
+        }
+        .score-card-main {
+            background: #fff;
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-bottom: 20px;
+        }
+        .medal-icon {
+            width: 80px;
+            height: 80px;
+            background: #e6f9f0;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+        .total-score-val {
+            font-size: 38px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        .total-score-lbl {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+        .student-info-box {
+            background: #fdfdfd;
+            border: 1px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: left;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            color: #6b7280;
+        }
+        .info-val {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .tab-btn {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .tab-btn.active {
+            background: #0b132b;
+            color: #fff;
+            border-color: #0b132b;
+        }
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .stat-card-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .stat-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+        }
+        .stat-subtitle {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+        .stat-badge {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .badge-blue { background: #0ea5e9; }
+        .badge-green { background: #22c55e; }
+        .badge-red { background: #ef4444; }
+        .badge-gray { background: #64748b; }
+
+        .more-details-btn {
+            width: 100%;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="close-btn">&#10005;</button>
+        <button class="menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <div class="container" id="loginView">
+        <div class="back-row">
+            <button class="back-arrow-btn">&#8592;</button>
+            <h1>İmtahan nəticələri</h1>
+        </div>
+
+        <div class="form-group">
+            <label>İmtahan növü</label>
+            <select class="select-box" id="examType">
+                <option value="">Seçin</option>
+                <option value="Buraxılış">Buraxılış</option>
+                <option value="Blok">Blok</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>İmtahan</label>
+            <select class="select-box" id="examName">
+                <option value="">Seçin</option>
+                <option value="Sınaq 1">Sınaq 1</option>
+                <option value="Sınaq 2">Sınaq 2</option>
+                <option value="Sınaq 3">Sınaq 3</option>
+                <option value="Sınaq 4" selected>Sınaq 4</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>İş nömrəsi</label>
+            <input type="text" class="input-box" id="workNumber" placeholder="Daxil edin" value="8356476">
+            <div class="error-msg" id="errorMsg">Zəhmət olmasa bütün xanaları doldurun</div>
+        </div>
+
+        <div class="btn-row">
+            <button class="submit-btn" onclick="checkResults()">Yoxla &rarr;</button>
+            <button class="cancel-btn">Ləğv et</button>
+        </div>
+    </div>
+
+    <div class="container results-container" id="resultsOverview">
+        <div class="back-row">
+            <button class="back-arrow-btn" onclick="goBackToLogin()">&#8592;</button>
+            <h1>İmtahan nəticələri</h1>
+        </div>
+
+        <div class="score-card-main">
+            <div class="medal-icon">&#127891;</div>
+            <div class="total-score-val">205.00</div>
+            <div class="total-score-lbl">Ümumi bal</div>
+
+            <div class="student-info-box">
+                <div class="info-row">
+                    <span class="info-label">Ad və soyad:</span>
+                    <span class="info-val">HUSEYN ƏLİYEV</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">İş nömrəsi:</span>
+                    <span class="info-val" id="displayWorkNo">8356476</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Variant:</span>
+                    <span class="info-val">A</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Altqrup:</span>
+                    <span class="info-val">3</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="student-info-box" style="margin-bottom: 20px;">
+            <div class="info-row" style="font-weight: 600; color: #6b7280;">
+                <span>Fənn</span>
+                <span>Uğur faizi</span>
+                <span>Bal</span>
+            </div>
+            <div class="info-row">
+                <span>İngilis dili</span>
+                <span>90.00</span>
+                <span>90</span>
+            </div>
+            <div class="info-row">
+                <span>Ana dili</span>
+                <span>80.00</span>
+                <span>80</span>
+            </div>
+            <div class="info-row">
+                <span>Riyaziyyat</span>
+                <span>30.00</span>
+                <span>30</span>
+            </div>
+            <div class="info-row" style="font-weight: 700; border-top: 2px solid #e5e7eb; margin-top: 5px; padding-top: 10px;">
+                <span>Ümumi</span>
+                <span style="color: #0ea5e9;">66.67%</span>
+                <span style="color: #0ea5e9;">205.00</span>
+            </div>
+        </div>
+
+        <button class="more-details-btn" onclick="openSubjectView('english')">Daha ətraflı</button>
+    </div>
+
+    <div class="container results-container" id="subjectView">
+        <div class="back-row">
+            <button class="back-arrow-btn" onclick="backToOverview()">&#8592;</button>
+            <h1 id="studentNameHeader">HUSEYN ƏLİYEV</h1>
+        </div>
+
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchSubject('english')" id="tabEng">İngilis dili</button>
+            <button class="tab-btn" onclick="switchSubject('azeri')" id="tabAze">Ana dili</button>
+            <button class="tab-btn" onclick="switchSubject('math')" id="tabMath">Riyaziyyat</button>
+        </div>
+
+        <div id="subjectContentCards"></div>
+    </div>
+
+    <script>
+        const subjectData = {
+            english: { questions: 30, correct: 27, wrong: 3, written: "3.50", percent: "90.00%" },
+            azeri: { questions: 30, correct: 24, wrong: 6, written: "2.67", percent: "80.00%" },
+            math: { questions: 25, correct: 7, wrong: 12, written: "0.00", percent: "30.00%" }
+        };
+
+        function checkResults() {
+            const type = document.getElementById('examType').value;
+            const exam = document.getElementById('examName').value;
+            const workNo = document.getElementById('workNumber').value.trim();
+            const err = document.getElementById('errorMsg');
+
+            if (!type || !exam || !workNo) {
+                err.style.display = 'block';
+                return;
+            }
+            err.style.display = 'none';
+            document.getElementById('displayWorkNo').innerText = workNo;
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('resultsOverview').style.display = 'block';
+        }
+
+        function goBackToLogin() {
+            document.getElementById('resultsOverview').style.display = 'none';
+            document.getElementById('loginView').style.display = 'flex';
+        }
+
+        function backToOverview() {
+            document.getElementById('subjectView').style.display = 'none';
+            document.getElementById('resultsOverview').style.display = 'block';
+        }
+
+        function openSubjectView(subj) {
+            document.getElementById('resultsOverview').style.display = 'none';
+            document.getElementById('subjectView').style.display = 'block';
+            switchSubject(subj);
+        }
+
+        function switchSubject(subj) {
+            document.getElementById('tabEng').className = 'tab-btn' + (subj === 'english' ? ' active' : '');
+            document.getElementById('tabAze').className = 'tab-btn' + (subj === 'azeri' ? ' active' : '');
+            document.getElementById('tabMath').className = 'tab-btn' + (subj === 'math' ? ' active' : '');
+
+            const data = subjectData[subj];
+            const container = document.getElementById('subjectContentCards');
+            
+            container.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <div class="stat-icon" style="background: #e0f2fe; color: #0284c7;">&#128221;</div>
+                        <div><div class="stat-title">Sual sayı:</div><div class="stat-subtitle">Açıq, qapalı</div></div>
+                    </div>
+                    <div class="stat-badge badge-blue">${data.questions}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <div class="stat-icon" style="background: #dcfce7; color: #16a34a;">&#9989;</div>
+                        <div><div class="stat-title">Düzgün cavablar:</div><div class="stat-subtitle">Açıq, qapalı</div></div>
+                    </div>
+                    <div class="stat-badge badge-green">${data.correct}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <div class="stat-icon" style="background: #fee2e2; color: #dc2626;">&#10060;</div>
+                        <div><div class="stat-title">Yanlış cavablar:</div><div class="stat-subtitle">Qapalı</div></div>
+                    </div>
+                    <div class="stat-badge badge-red">${data.wrong}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <div class="stat-icon" style="background: #dcfce7; color: #16a34a;">&#128196;</div>
+                        <div><div class="stat-title">Yazı işləri:</div><div class="stat-subtitle">Açıq</div></div>
+                    </div>
+                    <div class="stat-badge badge-green">${data.written}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-left">
+                        <div class="stat-icon" style="background: #e0e7ff; color: #4f46e5;">%</div>
+                        <div><div class="stat-title">Ümumi uğur faizi:</div><div class="stat-subtitle">Açıq, qapalı</div></div>
+                    </div>
+                    <div class="stat-badge badge-gray" style="background: #1e293b;">${data.percent}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
